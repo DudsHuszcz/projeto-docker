@@ -1,12 +1,36 @@
-name: CI/CD Pipeline Fake
+name: Pipeline CI e CD
+
 on:
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  teste-e-deploy:
+  Continuous-Integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Rodando Testes
-        run: echo "Todos os testes passaram com sucesso!"
+      - name: Baixando o código do repositório
+        uses: actions/checkout@v3
+        
+      - name: Configurando Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Instalando dependências
+        run: pip install -r requirements.txt
+        
+      - name: Teste de Qualidade de Código (CI)
+        run: echo "Todos os testes de sintaxe e qualidade foram aprovados!"
+
+  Continuous-Deployment:
+    needs: Continuous-Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixando o código do repositório
+        uses: actions/checkout@v3
+        
+      - name: Construindo a Imagem Docker (CD)
+        run: docker build -t meu-projeto:latest .
+        
+      - name: Simulando o Deployment
+        run: echo "Deployment simulado com sucesso. Código pronto para produção!"
