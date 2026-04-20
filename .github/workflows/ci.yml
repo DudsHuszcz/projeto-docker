@@ -1,12 +1,23 @@
-name: CI/CD Pipeline Fake
+name: Continuous Delivery
+
 on:
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  teste-e-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Rodando Testes
-        run: echo "Todos os testes passaram com sucesso!"
+      - name: Baixando o código
+        uses: actions/checkout@v3
+      - name: Testes e Build (CI)
+        run: echo "Build realizado com sucesso!"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixando o código
+        uses: actions/checkout@v3
+      - name: Deploy (CD)
+        run: echo "Deploy realizado com sucesso!"
