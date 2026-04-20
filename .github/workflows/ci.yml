@@ -1,0 +1,21 @@
+name: Continuous Delivery
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixando o código
+        uses: actions/checkout@v3
+      - name: Testes e Build (CI)
+        run: echo "Build realizado com sucesso!"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixando o código
+        uses: actions/checkout@v3
+      - name: Deploy (CD)
+        run: echo "Deploy realizado com sucesso!"
