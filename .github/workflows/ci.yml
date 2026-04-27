@@ -1,21 +1,31 @@
-name: Continuous Delivery
+name: CI com Testes e Alertas
 
-on: push
+on:
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build:
+  testes-e-alertas:
     runs-on: ubuntu-latest
     steps:
       - name: Baixando o código
         uses: actions/checkout@v3
-      - name: Testes e Build (CI)
-        run: echo "Build realizado com sucesso!"
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Baixando o código
-        uses: actions/checkout@v3
-      - name: Deploy (CD)
-        run: echo "Deploy realizado com sucesso!"
+      - name: Configurando Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalando dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodando os 5 Testes Unitários
+        run: pytest test_app.py
+
+      - name: Enviando Alerta para o Discord
+        if: success()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: '✅ SUCESSO! Uma nova PR rodou os testes unitários perfeitamente!'
