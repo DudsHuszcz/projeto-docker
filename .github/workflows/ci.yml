@@ -1,0 +1,31 @@
+name: CI com Testes e Alertas
+
+on: push
+
+jobs:
+  testes-e-alertas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixando o código
+        uses: actions/checkout@v3
+
+      - name: Configurando Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalando dependências e o Pytest
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Rodando os 5 Testes Unitários
+        run: pytest test_app.py
+
+      - name: Enviando Alerta para o Discord
+        if: always()
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: '✅ SUCESSO! A pipeline rodou com os testes unitários!'
