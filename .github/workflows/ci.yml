@@ -14,8 +14,10 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Instalando dependências
-        run: pip install -r requirements.txt
+      - name: Instalando dependências e o Pytest
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
 
       - name: Rodando os 5 Testes Unitários
         run: pytest test_app.py
